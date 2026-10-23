@@ -22,6 +22,8 @@ import com.example.myfinance.login.LoginScreen
 import com.example.myfinance.model.Movimentacao
 import com.example.myfinance.movimentacoes.NovaMovimentacaoScreen
 import com.example.myfinance.relatorios.RelatoriosScreen
+import com.example.myfinance.metas.MetaScreen
+import com.example.myfinance.perfil.PerfilScreen
 import com.example.myfinance.utils.*
 
 class MainActivity : ComponentActivity() {
@@ -95,6 +97,7 @@ fun NuvytraApp(onLogout: () -> Unit) {
             .fillMaxSize()
             .background(Fundo)
     ) {
+
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -128,24 +131,33 @@ fun NuvytraApp(onLogout: () -> Unit) {
                 .padding(12.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
+
             val telas = listOf(
                 "dashboard" to "Início",
                 "historico" to "Histórico",
                 "nova" to "Nova movimentação",
-                "relatorios" to "Relatórios"
+                "relatorios" to "Relatórios",
+                "metas" to "Metas",
+                "perfil" to "Perfil"
             )
 
             telas.forEach { (rota, titulo) ->
                 Button(
-                    onClick = { telaAtual = rota },
+                    onClick = {
+                        telaAtual = rota
+                    },
                     shape = RoundedCornerShape(12.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor =
-                            if (telaAtual == rota) Verde
-                            else VerdeClaro,
+                            if (telaAtual == rota)
+                                Verde
+                            else
+                                VerdeClaro,
                         contentColor =
-                            if (telaAtual == rota) Branco
-                            else Verde
+                            if (telaAtual == rota)
+                                Branco
+                            else
+                                Verde
                     )
                 ) {
                     Text(titulo)
@@ -169,13 +181,16 @@ fun NuvytraApp(onLogout: () -> Unit) {
                 "nova" -> {
                     NovaMovimentacaoScreen(
                         onSalvar = { novaMovimentacao ->
+
                             val novoId =
                                 (movimentacoes.maxOfOrNull {
                                     it.id
                                 } ?: 0) + 1
 
                             movimentacoes.add(
-                                novaMovimentacao.copy(id = novoId)
+                                novaMovimentacao.copy(
+                                    id = novoId
+                                )
                             )
 
                             telaAtual = "historico"
@@ -188,6 +203,16 @@ fun NuvytraApp(onLogout: () -> Unit) {
 
                 "relatorios" -> {
                     RelatoriosScreen(movimentacoes)
+                }
+
+                "metas" -> {
+                    MetaScreen()
+                }
+
+                "perfil" -> {
+                    PerfilScreen(
+                        onLogout = onLogout
+                    )
                 }
             }
         }
